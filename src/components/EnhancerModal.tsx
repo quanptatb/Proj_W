@@ -14,6 +14,7 @@ import {
   Key,
   HelpCircle,
   Eye,
+  Search,
 } from 'lucide-react';
 import { ExtractedImage, EnhancementOptions } from '@/types';
 import { enhanceImageOnCanvas } from '@/lib/enhancer/canvas-upscaler';
@@ -23,9 +24,10 @@ import { getProxiedImageUrl, sanitizeFilename } from '@/lib/utils';
 interface EnhancerModalProps {
   image: ExtractedImage | null;
   onClose: () => void;
+  onReverseSearch?: (image: ExtractedImage) => void;
 }
 
-export function EnhancerModal({ image, onClose }: EnhancerModalProps) {
+export function EnhancerModal({ image, onClose, onReverseSearch }: EnhancerModalProps) {
   const [options, setOptions] = useState<EnhancementOptions>({
     engine: 'client',
     scale: 2,
@@ -272,12 +274,27 @@ export function EnhancerModal({ image, onClose }: EnhancerModalProps) {
             </div>
           </div>
 
-          <button
-            onClick={onClose}
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
+          <div className="flex items-center gap-2">
+            {onReverseSearch && (
+              <button
+                type="button"
+                onClick={() => onReverseSearch(image)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 hover:text-cyan-200 border border-cyan-500/30 text-xs font-semibold transition-all active:scale-95"
+                title="Tìm xem trên web có bản phân giải cao hơn của ảnh này không"
+              >
+                <Search className="w-3.5 h-3.5 text-cyan-400" />
+                <span className="hidden sm:inline">🔍 Tìm bản HD hơn trên Web</span>
+                <span className="sm:hidden">Tìm HD Web</span>
+              </button>
+            )}
+
+            <button
+              onClick={onClose}
+              className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
         </div>
 
         {/* Content Body: Split View (Preview on left, Controls on right) */}
@@ -324,6 +341,17 @@ export function EnhancerModal({ image, onClose }: EnhancerModalProps) {
 
           {/* Right: Enhancement Controls */}
           <div className="lg:col-span-5 flex flex-col gap-5 bg-slate-950/50 p-5 rounded-2xl border border-slate-800/80">
+            {onReverseSearch && (
+              <button
+                type="button"
+                onClick={() => onReverseSearch(image)}
+                className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-cyan-600/10 hover:bg-cyan-600/20 text-cyan-300 border border-cyan-500/30 text-xs font-semibold transition-all shadow-sm active:scale-98"
+              >
+                <Search className="w-3.5 h-3.5 text-cyan-400" />
+                <span>🔍 Tìm bản HD hơn trên Web (Google Lens / Bing)</span>
+              </button>
+            )}
+
             {/* Engine Tabs */}
             <div>
               <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider block mb-2">

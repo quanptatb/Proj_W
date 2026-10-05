@@ -9,10 +9,11 @@ import { getProxiedDownloadUrl, sanitizeFilename } from '@/lib/utils';
 interface ImageGalleryProps {
   result: ExtractionResult | null;
   onEnhance: (image: ExtractedImage) => void;
+  onReverseSearch?: (image: ExtractedImage) => void;
   onSwitchToUpload?: () => void;
 }
 
-export function ImageGallery({ result, onEnhance, onSwitchToUpload }: ImageGalleryProps) {
+export function ImageGallery({ result, onEnhance, onReverseSearch, onSwitchToUpload }: ImageGalleryProps) {
   const [filterOnlyOriginals, setFilterOnlyOriginals] = useState(false);
   const [isBatchDownloading, setIsBatchDownloading] = useState(false);
 
@@ -125,7 +126,12 @@ export function ImageGallery({ result, onEnhance, onSwitchToUpload }: ImageGalle
       {/* Grid of Image Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
         {displayedImages.map((img) => (
-          <ImageCard key={img.id} image={img} onEnhance={onEnhance} />
+          <ImageCard
+            key={img.id}
+            image={img}
+            onEnhance={onEnhance}
+            onReverseSearch={onReverseSearch}
+          />
         ))}
       </div>
     </div>

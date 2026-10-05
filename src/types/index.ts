@@ -48,3 +48,5 @@ export interface HistoryItem {
   imageCount: number;
   title?: string;
 }
+
+export * from './reverse-search';

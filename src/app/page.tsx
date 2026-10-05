@@ -6,6 +6,7 @@ import { ExtractorBar } from '@/components/ExtractorBar';
 import { ImageDropzone } from '@/components/ImageDropzone';
 import { ImageGallery } from '@/components/ImageGallery';
 import { EnhancerModal } from '@/components/EnhancerModal';
+import { ReverseSearchModal } from '@/components/ReverseSearchModal';
 import { HistoryPanel } from '@/components/HistoryPanel';
 import { QualityTips } from '@/components/QualityTips';
 import { ExtractedImage, ExtractionResult, HistoryItem } from '@/types';
@@ -18,6 +19,7 @@ export default function HomePage() {
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<ExtractionResult | null>(null);
   const [enhancingImage, setEnhancingImage] = useState<ExtractedImage | null>(null);
+  const [reverseSearchImage, setReverseSearchImage] = useState<ExtractedImage | null>(null);
   const [historyItems, setHistoryItems] = useState<HistoryItem[]>([]);
 
   // Load history from localStorage on client mount
@@ -155,6 +157,7 @@ export default function HomePage() {
             <ImageGallery
               result={result}
               onEnhance={(img) => setEnhancingImage(img)}
+              onReverseSearch={(img) => setReverseSearchImage(img)}
               onSwitchToUpload={() => setActiveTab('upload')}
             />
           </div>
@@ -190,6 +193,19 @@ export default function HomePage() {
         <EnhancerModal
           image={enhancingImage}
           onClose={() => setEnhancingImage(null)}
+          onReverseSearch={(img) => setReverseSearchImage(img)}
+        />
+      )}
+
+      {/* Reverse Search Modal */}
+      {reverseSearchImage && (
+        <ReverseSearchModal
+          image={reverseSearchImage}
+          onClose={() => setReverseSearchImage(null)}
+          onSelectForEnhance={(img) => {
+            setReverseSearchImage(null);
+            setEnhancingImage(img);
+          }}
         />
       )}
     </div>

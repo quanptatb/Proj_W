@@ -1,16 +1,17 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Download, Wand2, Copy, Check, ExternalLink, Sparkles, Image as ImageIcon } from 'lucide-react';
+import { Download, Wand2, Copy, Check, ExternalLink, Sparkles, Image as ImageIcon, Search } from 'lucide-react';
 import { ExtractedImage } from '@/types';
 import { formatBytes, formatDimensions, getProxiedDownloadUrl, getProxiedImageUrl, sanitizeFilename } from '@/lib/utils';
 
 interface ImageCardProps {
   image: ExtractedImage;
   onEnhance: (image: ExtractedImage) => void;
+  onReverseSearch?: (image: ExtractedImage) => void;
 }
 
-export function ImageCard({ image, onEnhance }: ImageCardProps) {
+export function ImageCard({ image, onEnhance, onReverseSearch }: ImageCardProps) {
   const [copied, setCopied] = useState(false);
   const [imgError, setImgError] = useState(false);
   const [imgFailed, setImgFailed] = useState(false);
@@ -137,6 +138,17 @@ export function ImageCard({ image, onEnhance }: ImageCardProps) {
             )}
           </div>
         </div>
+
+        {/* Reverse Search HD Button */}
+        {onReverseSearch && (
+          <button
+            onClick={() => onReverseSearch(image)}
+            className="w-full mb-2 flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 text-cyan-300 hover:text-cyan-200 border border-cyan-500/30 text-xs font-semibold transition-all active:scale-95 shadow-sm"
+          >
+            <Search className="w-3.5 h-3.5 text-cyan-400" />
+            <span>🔍 Tìm bản HD hơn trên Web</span>
+          </button>
+        )}
 
         {/* Action Buttons */}
         <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-800/80">
